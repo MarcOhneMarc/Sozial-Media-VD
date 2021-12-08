@@ -1,3 +1,8 @@
+<form action="index.php" method="post">
+		Mitteilungen: <input type="text" name="message" /><br />
+		<input type="Submit" value="Posten" />
+	</form>
+
 <?php
 
 // Wenn sie eine lösung mit Arrays und Schleifen haben wollen können sie die sen code

@@ -13,7 +13,7 @@
       <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
           <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
-            <img src="./img/Zeichenflache_12x.png" alt="Grapecode Logo" >
+            <img src="./img/Zeichenflache_12x.png" alt="Grapecode Logo" height="64" width="64">
           </a>
 
           <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
@@ -35,31 +35,43 @@
                 Customers
               </a>
             </li>
+            <li>
+              <a href="#" class="nav-link text-white">
+              <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#postModal">Create Post</button>
+              </a>
+            </li>
           </ul>
-        </div>
-      </div>
-    </div>
-    <div class="px-3 py-2 border-bottom mb-3">
-      <div class="container d-flex flex-wrap justify-content-center">
-        <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto">
-          <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-        </form>
-
-        <div class="text-end">
-          <button type="button" class="btn btn-light text-dark me-2">Login</button>
-          <button type="button" class="btn btn-primary">Sign-up</button>
         </div>
       </div>
     </div>
   </header>
 
-
-	<form action="index.php" method="post">
-		Mitteilungen: <input type="text" name="message" /><br />
-		<input type="Submit" value="Posten" />
-	</form>
-
-	<h1>Alle Mitteilungen:</h1>
+  <div class="modal fade" id="postModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <form action="index.php" method="post">
+        <div class="mb-3 titleInput">
+          <label class="form-label">Title</label>
+          <input type="text" name="title" class="form-control">
+        </div>
+        <div class="mb-3 msginput">
+          <label class="form-label">Nachricht</label>
+          <textarea type="textarea" name="message" class="form-control"></textarea>
+        </div>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Senden</button>
+      </div>
+    
+    </div>
+  </div>
+</div>
 	<?php
       $servername = "localhost";
       $username = "root";
@@ -70,8 +82,7 @@
         $conn = new mysqli($servername, $username, $password, $dbname);
         if ($conn->connect_error) {
           die("Connection failed: " . $conn->connect_error);
-        } 
-
+        }
       	session_start();
           if (!isset($_SESSION["index"]))
           {
@@ -85,24 +96,48 @@
         	{
             $_SESSION["index"]++;
             $i = $_SESSION["index"];
-        		$_SESSION["msgs"][$i]= $_POST["message"];
-				    $_SESSION["rmsgs"]=array_reverse($_SESSION["msgs"]);
+        		$_SESSION["msgs"]= $_POST["message"];
+            $_SESSION["msgTitle"]= $_POST["title"];
+            $sqlin = "INSERT INTO post (username, title, msg)
+            VALUES ('Marc','{$_SESSION["msgTitle"]}', '{$_SESSION["msgs"]}')";
+            if (mysqli_query($conn, $sqlin)) {
+              echo "Deine Nachricht wurde versendet";
+            } else {
+              echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+            }
 
         	}	
+          mysqli_close($conn);
+?>
 
-          $i = $_SESSION["index"];
-        	if (isset($_SESSION["msgs"][$i]))
-        	{
-				for ($a=1; $a<=$i; $a++)
-            {
-              echo "<div class=\"beitrag btrg\">";
-              echo "<h4>Nutzername</h4>";
-              echo "<p>".$a.": ".$_SESSION["rmsgs"][$a]."</p>";
-              echo "</div>";
-            }
-        	}
+          <section id="beiträge">
+          <h1 class="d-flex justify-content-center">Alle Mitteilungen</h1>
+            <div class="btg">
+              <?php 
+              $conn = new mysqli($servername, $username, $password, $dbname);
+              if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+              }
+              $sqlsel = "SELECT username, title, msg FROM post";
+              $result = $conn->query($sqlsel);
 
-        	?>
+                if ($result->num_rows > 0) {
+                  // output data of each row
+                while($row = $result->fetch_assoc()) {
+                  echo "<div class=\"beitrag\">";
+                  echo "<hr>";
+                  echo "<h4>".$row["username"]."</h4>";
+                  echo "<h5>".$row["title"]."</h5>". $row["msg"];
+                  echo "<hr>";
+                  echo "</div>";
+                }
+                } else {
+                  echo "0 results";
+                }
+              mysqli_close($conn);
+              ?>
+            </div>
+          </section>
 
           <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
             <symbol id="bootstrap" viewBox="0 0 118 94">
