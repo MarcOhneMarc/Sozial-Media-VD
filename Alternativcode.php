@@ -39,3 +39,13 @@
         	}
 
         	?>
+
+
+
+echo "<div class=\"beitrag\">";
+                  echo "<hr>";
+                  echo "<h4 class=\"d-flex justify-content-center\">".$username."</h4>";
+                  echo "<h5 class=\"d-flex justify-content-center\">".$title."</h5>";
+                  echo "<h6 class=\"d-flex justify-content-center\">".$msg."</h6>"; 
+                  echo "<hr>";
+                  echo "</div>";

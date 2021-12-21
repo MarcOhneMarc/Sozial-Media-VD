@@ -37,7 +37,7 @@
             </li>
             <li>
               <a href="#" class="nav-link text-white">
-              <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#postModal">Create Post</button>
+                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#postModal">Create Post</button>
               </a>
             </li>
           </ul>
@@ -62,13 +62,12 @@
         <div class="mb-3 msginput">
           <label class="form-label">Nachricht</label>
           <textarea type="textarea" name="message" class="form-control"></textarea>
+          <button type="submit" class="btn btn-primary">Senden</button>
         </div>
       </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Senden</button>
       </div>
-    
     </div>
   </div>
 </div>
@@ -109,25 +108,50 @@
         	}	
           mysqli_close($conn);
 ?>
-
-          <section id="beiträge">
+      <main>
+        <section id=toppro>
+          <div class="topics">
+            <div class="topic-box border rounded-3">
+              <h4>"Topic Box"</h4>
+            </div>
+            <div class="topic-box border rounded-3">
+              <h4>"Topic Box"</h4>
+            </div>
+            <div class="topic-box border rounded-3">
+              <h4>"Topic Box"</h4>
+            </div>
+            <div class="topic-box border rounded-3">
+              <h4>"Topic Box"</h4>
+            </div>
+            <div class="topic-box border rounded-3">
+              <h4>"Topic Box"</h4>
+            </div>
+          </div>
+        </section>
+        <section id="beiträge">
           <h1 class="d-flex justify-content-center">Alle Mitteilungen</h1>
             <div class="btg">
               <?php 
+
               $conn = new mysqli($servername, $username, $password, $dbname);
               if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
               }
-              $sqlsel = "SELECT username, title, msg FROM post";
+              $sqlsel = "SELECT username, title, msg, likes FROM post";
               $result = $conn->query($sqlsel);
+              $sqlin = "INSERT INTO post (likes)
+              VALUES ('1')";
 
                 if ($result->num_rows > 0) {
                   // output data of each row
                 while($row = $result->fetch_assoc()) {
+
                   echo "<div class=\"beitrag\">";
                   echo "<hr>";
-                  echo "<h4>".$row["username"]."</h4>";
-                  echo "<h5>".$row["title"]."</h5>". $row["msg"];
+                  echo "<h4 class=\"d-flex justify-content-center\">".$row["username"]."</h4>";
+                  echo "<h5 class=\"d-flex justify-content-center\">".$row["title"]."</h5>";
+                  echo "<h6 class=\"d-flex justify-content-center\">".$row["msg"]."</h6>"; 
+                  echo "<a href=\"#\" class=\"likebutton nav-link \">".."<svg class=\"bi d-block mx-auto mb-1\" width=\"24\" height=\"24\">"."<use xlink:href=\"#hearth\"/>"."</svg>".$row["likes"]."</a>";
                   echo "<hr>";
                   echo "</div>";
                 }
@@ -138,7 +162,7 @@
               ?>
             </div>
           </section>
-
+      </main>
           <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
             <symbol id="bootstrap" viewBox="0 0 118 94">
               <title>Bootstrap</title>
@@ -161,6 +185,8 @@
             <symbol id="grid" viewBox="0 0 16 16">
               <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"/>
             </symbol>
+            <symbol id="hearth" viewBox="0 0 16 16">
+              <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/></svg>            </symbol>
           </svg>
   <script src="./js/bootstrap.min.js"></script>
 </body>

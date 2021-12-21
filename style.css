@@ -39,4 +39,17 @@
     margin:  20px;
     
   }
+  .topics{
+    position: relative;
+    display: flex;
+    margin-right: 5px;
+    margin-left: 0px;
+  }
   
+  .likebutton{
+    color: black;
+  }
+
+  .likebutton:hover{
+    color: aqua;
+  }
